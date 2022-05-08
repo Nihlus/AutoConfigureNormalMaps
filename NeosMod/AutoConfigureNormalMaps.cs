@@ -8,15 +8,15 @@ namespace NeosMods
 {
     class AutoConfigureNormalMaps : NeosMod
     {
-        public override string Name => "AutoSetNormalMaps";
-        public override string Author => "";
+        public override string Name => "AutoConfigureNormalMaps";
+        public override string Author => "DoubleStyx";
         public override string Version => "1.0.0";
         public override string Link => "https://www.github.com/DoubleStyx/AutoConfigureNormalMaps";
 
         private static ModConfiguration config;
 
         [AutoRegisterConfigKey]
-        private static readonly ModConfigurationKey<string> KEY_REGEX = new ModConfigurationKey<string>("Regex", "", () => "normals");
+        private static readonly ModConfigurationKey<string> KEY_REGEX = new ModConfigurationKey<string>("Regex", "", () => "[Nn]ormals?");
 
         public override void DefineConfiguration(ModConfigurationDefinitionBuilder builder)
         {
@@ -39,7 +39,6 @@ namespace NeosMods
             static void Postfix(Slot slot, IAssetProvider<ITexture2D> texture, StereoLayout layout = StereoLayout.None, bool addCollider = true)
             {
                 StaticTexture2D textureprovider = (StaticTexture2D)texture;
-                Msg("Detected new import:" + slot.Name);
                 if (Regex.IsMatch(slot.Name, config.GetValue(KEY_REGEX)))
                 {
                     Msg("Naming heuristic triggered, setting texture to normal map");
